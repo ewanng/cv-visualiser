@@ -1,0 +1,18 @@
+.list-group {
+  min-height: 371.025px;
+  max-height: 371.025px;
+}
+
+/* .graphCard {
+  min-height: 55vh;
+  max-height: 55vh;
+} */
+
+.backButton {
+  line-height: 50%;
+  margin-left: 0 !important;
+}
+
+.noMarg {
+  padding-left: 0 !important;
+}
