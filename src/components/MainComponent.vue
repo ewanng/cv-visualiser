@@ -27,7 +27,8 @@
             ></b-form-radio-group>
           </b-form>
           <br />
-          <!-- Displays two Date pickers if the Comparison graph type is selected, gets the max and min date from the loading of dates above -->
+          <!-- Displays two Date pickers if the Comparison graph type is selected, 
+          gets the max and min date from the loading of dates above -->
           <b-form inline v-if="this.selectedGraphType == 'Comparison'">
             <label class="ml-auto mr-3" for="firstDatePicker"
               >First Reading Date:</label
@@ -52,7 +53,8 @@
               id="secondDatePicker"
             ></b-form-datepicker>
           </b-form>
-          <!-- If Individual graph type, display one date picker and get max and min dates in the same way -->
+          <!-- If Individual graph type selected, display one date picker 
+          and get max and min dates in the same way as above-->
           <b-form inline v-if="this.selectedGraphType == 'Individual'">
             <label class="ml-auto mr-3" for="firstDatePicker"
               >Reading Date:</label
@@ -68,7 +70,8 @@
           </b-form>
           <br />
           <b-row>
-            <!-- Use the selected Device ID and first and/or second date to load reading times -->
+            <!-- Use the selected Device ID and first and/or second date 
+            to call the loadCVReadings function which loads reading times -->
             <b-button
               class="m-1 ml-auto"
               variant="info"
@@ -82,7 +85,7 @@
             >
               View Readings
             </b-button>
-            <!-- Reset buttons which resets all selected fields in the form to nothing, clean slate for a new review -->
+            <!-- Reset button which resets all selected fields in the form, sets a clean slate for a new review -->
             <b-button
               class="m-1 mr-auto"
               variant="secondary"
@@ -106,6 +109,7 @@
         <b-col cols="8">
           <b-card>
             <div>
+              <!-- Display Comparison Mode options if graph type is comparison and both graphs have been generated -->
               <b-form-group
                 v-if="
                   this.firstGraphGenerated == true &&
@@ -124,12 +128,15 @@
               <hr />
             </div>
             <b-row>
+              <!-- This section displays if the comparison mode is Overlapped -->
               <b-col
                 v-if="this.selectedComparison == 'Overlapped'"
                 cols="3"
               ></b-col>
               <b-col v-if="this.selectedComparison == 'Overlapped'" cols="6"
-                ><b-card
+                >
+                <!-- This bootstrap card is displayed if both graphs are generated and mode is Overlapped -->
+                <b-card
                   class="graphCard"
                   v-if="
                     this.firstGraphGenerated == true &&
@@ -137,6 +144,7 @@
                     this.selectedComparison == 'Overlapped'
                   "
                 >
+                  <!-- Creates a row at the top of the graph card with both times and cross button -->
                   <b-row>
                     <b-col cols="10">
                       <p>
@@ -147,6 +155,8 @@
                       </p>
                     </b-col>
                     <b-col cols="2">
+                      <!-- Cross button which removes generated graphs and 
+                      sets mode back to side by side to view reading times again -->
                       <b-button
                         v-on:click="
                           (firstGraphGenerated = false),
@@ -162,13 +172,14 @@
                       ></b-button>
                     </b-col>
                   </b-row>
+                  <!-- Using ApexCharts plug in to plot the data set for overlapped graphs -->
                   <ApexChart
                     width="100%"
                     type="line"
                     :options="chartOptions"
                     :series="overlappedSeries"
                   ></ApexChart>
-
+                  <!-- This is the footer of the generated graph, with two buttons to view both overlapped data sets -->
                   <template #footer>
                     <div>
                       <b-button
@@ -177,6 +188,7 @@
                         v-b-modal="'ovdata-modal1'"
                         >View First Data</b-button
                       >
+                      <!-- Uses a bootstrapvue modal which pops up upon clicking the button view buttons -->
                       <b-modal
                         id="ovdata-modal1"
                         scrollable
@@ -211,6 +223,8 @@
                   </template>
                 </b-card></b-col
               >
+              <!-- This card shows No Data for the first date box 
+              if no reading times are available for the first selected date -->
               <b-col cols="6">
                 <b-card
                   class="graphCard mx"
@@ -218,6 +232,10 @@
                 >
                   <p>No data available - Please select another date.</p>
                 </b-card>
+                <!-- This card shows a generated first graph with the same setup as above with buttons and modal
+                if either first graph is generated and 
+                mode is side by side or first is generated and 
+                second is not and mode is overlapped -->
                 <b-card
                   class="graphCard"
                   v-if="
@@ -277,6 +295,10 @@
                     </b-modal>
                   </template>
                 </b-card>
+                <!-- This card displays the loaded reading times 
+                for the first selected date box, 
+                with a generate graph button that is read only 
+                until a reading time is selected -->
                 <b-card
                   class="graphCard"
                   v-if="
@@ -299,6 +321,7 @@
                       >Generate Graph</b-button
                     ></template
                   >
+                  <!-- This list group element displays the reading times for the first selected date -->
                   <b-list-group class="overflow-auto list-group">
                     <b-list-group-item
                       button
@@ -317,12 +340,16 @@
                 </b-card>
               </b-col>
               <b-col cols="6">
+                <!-- This card shows if no reading times are available for second data -->
                 <b-card
                   class="graphCard"
                   v-if="this.secondGraphReadings == 'No Data'"
                 >
                   <p>No data available - Please select another date.</p>
                 </b-card>
+                <!-- This card shows if a second graph has been generated 
+                and first one has not yet been generated in the same way as the first graph card above.
+                Code is the same as the for the different scenarios above but just for second graph box until line 455-->
                 <b-card
                   class="graphCard"
                   v-if="
@@ -425,12 +452,17 @@
           </b-card>
         </b-col>
       </b-row>
+      <!-- This row shows if graph type is Individual, 
+      with only one card showing in the row instead of two -->
       <b-row v-if="this.selectedGraphType == 'Individual'">
+        <!-- Cards below here are for Individual graph type, 
+        in a similar fashion as above except for just one graph and not two -->
         <b-col cols="2"> </b-col>
         <b-col cols="8">
           <b-card>
             <b-row>
               <b-col cols="3"></b-col>
+              <!-- Show card if first graph has been generated -->
               <b-col cols="6"
                 ><b-card
                   class="graphCard"
@@ -481,6 +513,7 @@
                     </div>
                   </template>
                 </b-card>
+                <!-- Show card if no data available for selected reading date -->
                 <b-card
                   class="graphCard mx"
                   v-if="this.firstGraphReadings == 'No Data'"
@@ -613,6 +646,9 @@ export default {
     };
   },
   mounted() {
+    // This mounted api call loads a list of Device IDs for the dropdown selection menu
+
+    // This sets the API URL using prototype variables defined in App
     let lookUpUrlActiveDevices = this.$apiUrl + this.$apiEnv + "/visualiser";
     let lookUpHeadersActiveDevices = {
       headers: {
