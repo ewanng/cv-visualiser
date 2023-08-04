@@ -646,16 +646,19 @@ export default {
     };
   },
   mounted() {
-    // This mounted api call loads a list of Device IDs for the dropdown selection menu
+    // This mounted api call targets an AWS Lambda function which loads a list of Device IDs for the dropdown selection menu
 
-    // This sets the API URL using prototype variables defined in App
+    // This format is the same for all API calls in the functions below, except the response sections, where data is mapped differently
+    // This sets the API URL using prototype variables defined in main.js
     let lookUpUrlActiveDevices = this.$apiUrl + this.$apiEnv + "/visualiser";
+    // Set the headers require for making the API post call, uses the api key variable coming from main.js
     let lookUpHeadersActiveDevices = {
       headers: {
         "Content-Type": "application/json",
         "x-api-key": this.$apiKey,
       },
     };
+    // Set the request JSON for the API call, matching a request type in the targeted Lambda Function
     let lookUpRequestActiveDevices = {
       RequestType: "ActiveDevices",
       DataDict: [
@@ -665,6 +668,7 @@ export default {
         },
       ],
     };
+    // Use the axios plugin with the three variables defined above to make a post and return the response data
     axios
       .post(
         lookUpUrlActiveDevices,
